@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MEVA &#8212; meva 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction to portfolio optimization" href="opt.html" />
+    <link rel="prev" title="MEVA" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="opt.html" title="Introduction to portfolio optimization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="MEVA"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="meva">
+<h1>MEVA<a class="headerlink" href="#meva" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Meva contains two mean-variance portfolio optimizers: an analytical
+optimizer and a numerical optimizer. Both are single-period optimizers.</p>
+<p><strong>Analytical optimizer</strong></p>
+<p>The analytical optimizer <code class="docutils literal"><span class="pre">aopt()</span></code> handles linear equality constraints and
+soft linear equality constraints (a penalty proportional to the squared
+deviation from equality is subtracted from the objective function).</p>
+<p><strong>Numerical optimizer</strong></p>
+<p>The numerical optimizer <code class="docutils literal"><span class="pre">nopt()</span></code> is a long-short optimizer that allows you
+to separately specify the sum of the negative portfolio weights and the sum
+of the positive weights. It handles soft linear equality constraints,
+inequality constraints (implemented as iterative soft constraints),
+turnover constraints (iteratively multiplying linear transaction costs),
+and (linear and quadratic) transaction costs.</p>
+<p><strong>Covariance estimation</strong></p>
+<p>Both portfolio optimizers need an estimate of the covariance matrix of
+asset returns. Meva contains two algorithms to estimate the covariance
+matrix: <code class="docutils literal"><span class="pre">cov_pca()</span></code> which is base on principal component analysis and
+<code class="docutils literal"><span class="pre">cov_fa()</span></code> which is based on factor analysis.</p>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p>Requirements:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>meva</td>
+<td>python, numpy</td>
+</tr>
+<tr class="row-even"><td>speed</td>
+<td>accelerated BLAS such as ATLAS</td>
+</tr>
+<tr class="row-odd"><td>unit tests</td>
+<td>nose</td>
+</tr>
+</tbody>
+</table>
+<p>Meva is a pure Python package. To install, all you have to do is to make
+sure Python can find the meva directory. Or you can install the traditional
+way:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py build
+$ sudo python setup.py install
+</pre></div>
+</div>
+<p>After you have installed meva, run the unit test suite:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">meva</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meva</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="go">&lt;snip&gt;</span>
+<span class="go">Ran 33 tests in 7.038s</span>
+<span class="go">OK (KNOWNFAIL=1)</span>
+<span class="go">&lt;nose.result.TextTestResult run=33 errors=0 failures=0&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/icon.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MEVA</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#install">Install</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">MEVA</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="opt.html"
+                        title="next chapter">Introduction to portfolio optimization</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="opt.html" title="Introduction to portfolio optimization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="MEVA"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2012, Keith Goodman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

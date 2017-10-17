@@ -1,0 +1,327 @@
+======================================
+Introduction to portfolio optimization
+======================================
+
+.. contents::
+
+Objective function
+==================
+
+In mean-variance portfolio optimization we maximize, subject to various
+constraints on the portfolio weights :math:`x`, the objective function
+
+.. math::
+    L = \rho x' \mu - \frac{1}{2}x' V x,
+    :label: eq_L
+
+where :math:`\rho` (a scalar) is the risk tolerance, :math:`\mu` (a :math:`n
+\times 1` vector) is the expected return, :math:`V` is the (:math:`n \times n`)
+covariance matrix of asset returns, :math:`x` (:math:`n \times 1`) is a vector
+of portfolio weights, and :math:`n` is the number of assets.
+
+Because we like return (the first term in Eq :eq:`eq_L`) but don't like
+variance (second term), we want to find the portfolio :math:`x` that maximizes
+Eq :eq:`eq_L`. To do so, the derivative of :math:`L` is more useful than
+:math:`L` itself:
+
+.. math::
+    \frac{\partial L}{\partial x}&= \rho \mu - \frac{1}{2}(V + V')x \\
+    &= \rho \mu - Vx
+    :label: eq_dLdx
+
+where we have made use of the fact that :math:`\frac{\partial}{\partial x}x'Ax
+= (A + A')x` and that the covariance matrix :math:`V` is symmetric (i.e.
+:math:`V = V'`).
+
+Here's some more matrix algebra that will come in handy:
+
+    - :math:`(AB)^{-1} = B^{-1}A^{-1}`
+    - :math:`(A+B)' = A' + B'`
+    - :math:`(AB)' = B' A'`
+    - :math:`AI=IA`
+    - :math:`(A')^{-1} = (A^{-1})'`
+
+Minimum variance
+================
+
+Let's start by finding the minimum variance portfolio subject to the constraint
+that the weights :math:`x` sum to :math:`k`. (If we did not add a sum to
+:math:`k` constraint then the minimum variance portfolio would be to have zero
+weight in each asset.)
+
+Because the sum to :math:`k` constraint is a linear equality constraint
+(:math:`x'\mathbf{1} = k`), we can use the `Lagrange multiplier
+<http://en.wikipedia.org/wiki/Lagrange_multiplier>`_ method to add the
+constraint to Eq :eq:`eq_L`:
+
+.. math::
+    L = \rho x' \mu - \frac{1}{2} x'Vx + \lambda (x'\mathbf{1} - k)
+
+where :math:`\mathbf{1}` is a :math:`n \times 1` vector of ones.
+
+Setting :math:`\rho` to zero since we have no tolerance for risk, gives:
+
+.. math::
+    L = - \frac{1}{2} x'Vx + \lambda (x'\mathbf{1} - k)
+
+Setting the first derivative of the Langrangian (with respect to a change in
+the portfolio weights) to zero and solving for the minimum variance portfolio
+gives
+
+.. math::
+    \frac{\partial L}{\partial x} &= 0 \\
+    - \frac{1}{2} (V + V')x + \lambda \mathbf{1}&= 0\\
+    Vx &= \lambda \mathbf{1}\\
+    V^{-1}Vx &= \lambda V^{-1} \mathbf{1}\\
+    x &= \lambda V^{-1} \mathbf{1}
+    :label: eq_x
+    
+But what is the value of the Langrange multipler :math:`\lambda`? From the
+sum-to-:math:`k` constaint, :math:`x` is also given by
+
+.. math::
+    x' \mathbf{1} = k
+    :label: eq_x1
+
+Substituting Eq :eq:`eq_x` into Eq :eq:`eq_x1` gives
+
+.. math::
+    \left(\lambda V^{-1} \mathbf{1}\right) ' \mathbf{1} &= k\\
+    \lambda (V^{-1} \mathbf{1}) ' \mathbf{1} &= k\\
+    \lambda  \mathbf{1}' V^{-1}  \mathbf{1} &= k\\
+    \lambda &= \frac{k}{ \mathbf{1}' V^{-1}  \mathbf{1}}
+    :label: eq_lambda
+
+Finally substituting Eq :eq:`eq_lambda` into Eq :eq:`eq_x` gives the minimum
+variance portfolio that sums to :math:`k`:
+
+.. math::
+   x &= \left( \frac{k}{ \mathbf{1}' V^{-1} \mathbf{1}} \right) V^{-1}
+        \mathbf{1}\\
+   x &=k \frac{V^{-1} \mathbf{1}}{ \mathbf{1}' V^{-1} \mathbf{1}}
+
+Mean--variance
+==============
+
+Next, let's find the optimal mean-variance portfolio without a constrait on
+the sum of the portfolio weights.
+
+We wish to find the :math:`x` that maximizes Eq :eq:`eq_L`. To do so we take
+the derivative of :math:`L` (as is already done in Eq :eq:`eq_x`) and solve
+for :math:`x` to get the optimimal portfolio with no constraint on the sum
+of the weights:
+
+.. math::
+    Vx &= \rho \mu \\
+    x &= \rho V^{-1} \mu.
+
+Let's now add a sum-to-:math:`k` constraint.
+
+Given that we are optimizing a convex function subject to linear equality
+constraints (sum-to-:math:`k`), the method of Lagrange is guaranteed to
+produce an optimal solution. The Lagrangian is
+
+.. math::
+    L = \rho x' \mu - \frac{1}{2} x'Vx + \lambda (x'\mathbf{1} - k)
+
+Setting the first derivative equal to zero and simplifying gives
+
+.. math::
+    \frac{\partial L}{\partial x} &= 0 \\
+    \rho \mu - Vx + \lambda \mathbf{1}&= 0 \\
+    Vx &= \left(\rho \mu  + \lambda \mathbf{1}\right) \\
+    V^{-1}Vx &=  \left( \rho V^{-1} \mu  + \lambda V^{-1} \mathbf{1} \right) \\
+    x &= \left(\rho V^{-1} \mu  + \lambda V^{-1} \mathbf{1}\right)
+    :label: eq_xrho
+
+Substituting Eq :eq:`eq_xrho` in Eq :eq:`eq_x1`:
+
+.. math::
+    \left(\rho V^{-1} \mu  + \lambda V^{-1} \mathbf{1}\right)' \mathbf{1}&= k\\
+    \rho \mu' V^{-1} \mathbf{1} + \lambda \mathbf{1}' V^{-1} \mathbf{1} &= k \\
+    \lambda \mathbf{1}' V^{-1}  \mathbf{1}
+        &=  k - \rho \mu' V^{-1}  \mathbf{1} \\
+    \lambda &= \frac{k - \rho \mu' V^{-1}  \mathbf{1}}
+                    {\mathbf{1}' V^{-1}  \mathbf{1}}
+    :label: eq_lambdarho
+
+Finally substituting Eq :eq:`eq_lambdarho` into Eq :eq:`eq_xrho` gives
+the portfolio that, given the sum-to-:math:`k` constraint, makes the optimal
+trade-off between expected return and variance:
+
+.. math::
+    x = \rho \left( V^{-1} \mu +
+        \frac{k - \mu' V^{-1} \mathbf{1}}
+             {\mathbf{1}' V^{-1}  \mathbf{1} } V^{-1} \mathbf{1} \right)
+
+General linear-equality constraints
+===================================
+
+In the preceding section we described mean-variance optimization under a linear
+equality constraint of :math:`x'\mathbf{1} = k`. We can generalize that result
+so that it applies to multiple, simultaneous linear equality constraints of the
+form :math:`a'x = b`.
+
+We want to maximize the utility
+
+.. math:: \rho x' \mu - \frac{1}{2} x'Vx
+
+subject to the constraints :math:`a_k'x = b_k` for constraints :math:`k`,
+:math:`k=0,...,K-1`. The Lagrangian for this problem is
+
+.. math:: L = \rho x' \mu - \frac{1}{2} x'Vx + \sum_k \lambda_k (a_k'x - b_k).
+
+Taking the partial of :math:`L` with respect to :math:`x`, we find that
+
+.. math::
+    \frac{\partial L}{\partial x} &= \rho\mu - Vx + \sum_k \lambda_k a_k,
+
+and setting this to zero yields
+
+.. math:: x = \rho V^{-1}\mu + \sum_k \lambda_k V^{-1} a_k.
+
+Substituting this solution into each constraint yields, for each
+:math:`j\le K`,
+
+.. math::
+    a_j' \rho V^{-1}\mu + \sum_k \lambda_k a_j' V^{-1} a_k &= b_j \\
+    \sum_k \lambda_k a_j' V^{-1} a_k &= b_j - a_j' \rho V^{-1}\mu,
+
+which can be expressed in matrix form as
+
+.. math::
+    \left[a_j' V^{-1} a_k\right] \left(\lambda_k\right)
+    = \left(b_j - a_j' \rho V^{-1} \mu\right),
+
+where square brackets indicate a matrix and parentheses indicate a column
+vector, and where :math:`j` indexes columns and :math:`k` indexes rows.
+
+By solving the matrix equation above, we can find the :math:`\lambda_k,` and
+this in turn allows us to find the optimal :math:`x`.
+
+Soft constraints
+================
+
+In this section we add soft linear equality constraints. Soft constraints are
+like equality constraint but instead of insisting on equality at all cost, we
+allow a deviation from equality. A penalty proportional to the squared
+deviation from equality is subtracted from the objective function
+
+A generic quadratic penality :math:`Z` can be expressed as
+
+.. math::
+    Z = - \theta (x'q - q_{0})^{2},
+
+where :math:`\theta` is a scalar that tells us the strength of the penality,
+:math:`q` is a :math:`n \times 1` vector such as a vector of stock betas, and
+:math:`q_{0}` is a scalar away from which we penalize values of :math:`x'q`.
+Simplifying gives
+
+.. math::
+    Z&= - \theta \left( x'q x' q - 2 x' q q_{0} + q_{0}^{2} \right) \\
+    &= - \theta x'q q' x + 2 \theta x' q q_{0} - \theta q_{0}^{2}
+    :label: eq_soft
+
+Adding the quadratic penalty :math:`Z` to the objective function :math:`L` in
+Eq :eq:`eq_soft` gives
+
+.. math::
+    L &= \rho x' \mu - \frac{1}{2}x' V x - \theta x'q q' x + 2 \theta x' q q_{0} - \theta q_{0}^{2} \\
+      &= \rho x' \mu + 2 \theta x' q q_{0} - x' \left( \frac{1}{2} V + \theta q q' \right) x - \theta q_{0}^{2}\\
+      &= \rho x' \left( \mu + \frac{2 \theta q_{0}}{\rho} q \right) - \frac{1}{2} x' \left( V + 2 \theta q q'\right) x - \theta q_{0}^{2}\\
+      &= \rho x' \mu_{q} - \frac{1}{2} x' V_{q} x - \theta q_{0}^{2},
+
+where
+
+.. math::
+    \mu_{q} &= \mu + 2 \frac{\theta q_{0}}{\rho} q \\
+    V_{q} &= V + 2 \theta q q'.
+
+So adding soft linear equality constraints to an algorithm that finds
+mean-variance optimal portfolios could not be easier---no modification is
+necessary. We need only to adjust the expected return and the covariance
+matrix.
+
+Inverse of covariance matrix
+============================
+
+The equations above take the inverse of the :math:`n \times n` covariance
+matrix of asset returns, where :math:`n` is the number of assets.
+
+Of the two meva optimizers, `aopt` and `nopt`, only `aopt` takes an
+explicit inverse. In fact the bottleneck of the analytical optimizer `aopt` is
+typically in finding the inverse of the covariance matrix.
+
+Here's a trick that for 500 assets and 10 risk factors, speeds up `aopt` by a
+factor of 7. (The downside of the trick is that the individual variance,
+:math:`D`, can no longer be zero.)
+
+Lemma 0.28 of Edgar Brunner's lecture notes (October 14, 2002) states: "Let
+:math:`E=E_{m \times n}`, :math:`F=E_{m \times n}`, :math:`C=C_{m \times
+m}` and assume that the inverses :math:`C^{-1}` and :math:`(C - EF)^{-1}`
+exist. Then, 
+
+.. math::
+    (C - EF)^{-1} = C^{-1} + C^{-1}E\left( I - FC^{-1}E\right)^{-1}FC^{-1}."
+    :label: eq_qi
+
+Making the following substitutions
+
+.. math::
+    C = D\\
+    E = -B\\
+    F = B',
+
+Eq :eq:`eq_qi` becomes
+
+.. math::
+    (D + BB')^{-1} = D^{-1} - D^{-1}B\left( I + B'D^{-1}B\right)^{-1}B'D^{-1}.
+    :label: eq_qibd
+
+Note that
+
+.. math::
+    \left(B'D^{-1}\right)' = D^{-1}B.
+
+Finally, making the substitution :math:`Z = B'D^{-1}` in Eq :eq:`eq_qibd`
+gives
+
+.. math::
+    (D + BB')^{-1} = D^{-1} - Z'\left(I + XB\right)^{-1}Z.
+    :label: eq_qibdx
+
+Let's try an example. Create a covariance matrix:
+
+    >>> n = 500; k = 10
+    >>> b = np.random.rand(n,k)
+    >>> d = np.random.rand(n)
+    >>> cov = np.dot(b,b.T) + np.diag(d)
+
+Take the inverse the brute-force way:
+
+    >>> timeit np.linalg.inv(cov)
+    10 loops, best of 3: 59.9 ms per loop
+
+And now that fast way:
+
+    >>> from meva.opt.util import fast_inverse
+    >>> timeit fast_inverse(b, d)
+    100 loops, best of 3: 7.1 ms per loop
+
+Numerical optimization
+======================
+
+For some problems an analytical solution does not exist.
+
+We've seen that linear equality constraints can be easily handled analytically.
+But what happens when you want the sum of the shorts to be :math:`-1` and the
+sum of the longs to be :math:`1`? In that case we do not know ahead of time
+which assets will be short and which will be long.
+
+The numerical optimizer in meva is based on an heuristic, gradient method. The
+heuristic part refers to dealing with the complications of a long-short
+portfolio with constraints.
+
+See `here <http://www.stanford.edu/~wfsharpe/mia/opt/mia_opt1.htm>`_ for
+background on the gradient method of portfolio optimization.        
+

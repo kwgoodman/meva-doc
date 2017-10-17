@@ -1,0 +1,698 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Function reference &#8212; meva 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Covariance matrix estimation" href="cov.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cov.html" title="Covariance matrix estimation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="function-reference">
+<h1>Function reference<a class="headerlink" href="#function-reference" title="Permalink to this headline">¶</a></h1>
+<p>Meva provides the following top-level functions:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#optimization"><span class="std std-ref">Optimization</span></a></td>
+<td><a class="reference internal" href="#meva.aopt" title="meva.aopt"><code class="xref py py-meth docutils literal"><span class="pre">aopt</span></code></a>,
+<a class="reference internal" href="#meva.nopt" title="meva.nopt"><code class="xref py py-meth docutils literal"><span class="pre">nopt</span></code></a>,
+<a class="reference internal" href="#meva.utility" title="meva.utility"><code class="xref py py-meth docutils literal"><span class="pre">utility</span></code></a>,
+<a class="reference internal" href="#meva.marginal_utility" title="meva.marginal_utility"><code class="xref py py-meth docutils literal"><span class="pre">marinal_utility</span></code></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#risk"><span class="std std-ref">Risk</span></a></td>
+<td><a class="reference internal" href="#meva.cov_pca" title="meva.cov_pca"><code class="xref py py-meth docutils literal"><span class="pre">cov_pca</span></code></a>,
+<a class="reference internal" href="#meva.cov_fa" title="meva.cov_fa"><code class="xref py py-meth docutils literal"><span class="pre">cov_fa</span></code></a>,
+<a class="reference internal" href="#meva.beta" title="meva.beta"><code class="xref py py-meth docutils literal"><span class="pre">beta</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="optimization">
+<span id="id1"></span><h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="meva.aopt">
+<code class="descclassname">meva.</code><code class="descname">aopt</code><span class="sig-paren">(</span><em>rho</em>, <em>mu</em>, <em>risk</em>, <em>equality=None</em>, <em>soft=None</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.aopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean-variance optimal portfolio with linear equality constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho</strong> : float</p>
+<blockquote>
+<div><p>Risk tolerance; this dilates the return relative to the variance
+in the objective function, so that the larger rho the more emphasis
+is placed on return.</p>
+</div></blockquote>
+<p><strong>mu</strong> : ndarray</p>
+<blockquote>
+<div><p>A 1d array of expected returns.</p>
+</div></blockquote>
+<p><strong>risk</strong> : list</p>
+<blockquote>
+<div><p>The common and individual risk factors (sometimes called systematic
+and idiocyncratic). The first element of the list contains the common
+risk factors: an array, B, of shape (n, k) where n is the number of
+assets and k is the number of risk factors. The second element of the
+list contains the individual variance of each asset: an array, D, of
+shape (n,). D should contain no zeros. The n by n covariance matrix,
+V, of asset returns is given by V = np.dot(B, B.T) + np.diag(D).</p>
+</div></blockquote>
+<p><strong>equality</strong> : {list, None}, optional</p>
+<blockquote>
+<div><p>A list containing the equality constraints. The first element of the
+list contains an array of shape (n, k) where n is the number of
+assets and k is the number of linear equality constraints. The
+second element is an array of shape (k,). For each k, we are
+requiring that <cite>np.dot(ac[:,k], x) = bc[k]</cite>, for the final portfolio
+<cite>x</cite>. By default (None) there are no equality constraints on the
+portfolio.</p>
+</div></blockquote>
+<p><strong>soft</strong> : {list, None}, optional</p>
+<blockquote>
+<div><p>A list containing three arrays that together describe the soft
+constraint. Let’s call the three arrays <cite>q</cite>, <cite>q0</cite>, and <cite>k</cite>. If
+there are <cite>s</cite> soft constraints then <cite>q</cite> has shape (n, s), <cite>q0</cite> and
+<cite>k</cite> have shape (s,). The soft constraint adds a penalty to the
+utility (objective) function, where the penalty for each soft
+constraint <cite>i</cite> is given by</p>
+<blockquote>
+<div><p>-k[i]*(np.dot(x.T, q[:,i]) - q0[i])**2</p>
+</div></blockquote>
+<p>The total penalty is the sum of the <cite>s</cite> penalties. So a soft
+constraint is a squared penalty on deviations from an equality
+constraint, or a soft equality constraint. The default (None) is
+not to include any soft constraints in the optimization.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>An array of shape (n,) that contains the mean-variance optimal
+portfolio.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.nopt" title="meva.nopt"><code class="xref py py-obj docutils literal"><span class="pre">meva.nopt</span></code></a></dt>
+<dd>numerical portfolio optimization</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This implementation takes an inverse of the covariance matrix.</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="meva.nopt">
+<code class="descclassname">meva.</code><code class="descname">nopt</code><span class="sig-paren">(</span><em>rho, mu, risk, sumk, x0=None, tol=[0.0001, 1e-10], position_limit=[-inf, inf], transaction_cost=None, turnover=[0, inf, 1000], soft=None, inequality=None, verbose=False, log=None</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.nopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Long-short mean-variance portfolio optimization.</p>
+<p>See the manual for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho</strong> : double</p>
+<blockquote>
+<div><p>Risk tolerance. The higher the value, the less concerned you are
+about risk (or the more concerned you are about return).</p>
+</div></blockquote>
+<p><strong>mu</strong> : ndarray</p>
+<blockquote>
+<div><p>The expected future return of each asset. A 1d array of size <cite>n</cite>
+where <cite>n</cite> is the number of assets.</p>
+</div></blockquote>
+<p><strong>risk</strong> : list</p>
+<blockquote>
+<div><p>The common and individual risk factors (sometimes called systematic
+and idiocyncratic). The first element of the list contains the common
+risk factors: an array, B, of shape (n, k) where n is the number of
+assets and k is the number of risk factors. The second element of the
+list contains the individual variance of each asset: an array, D, of
+shape (n,). The n by n covariance matrix, V, of asset returns is
+given by V = np.dot(B, B.T) + np.diag(D).</p>
+</div></blockquote>
+<p><strong>sumk</strong> : list</p>
+<blockquote>
+<div><p>A two-element list containing the sum of the shorts (first element
+in list) and the sum of the longs (second element). The sum of the
+longs, for example, in portfolio x (a 1d array of portfolio weights)
+is x[x &gt; 0].sum(). If, for example, you’d like the sum of the shorts
+to be -1 and the sum of the longs to 1, then use sumk = [-1, 1].</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>The optimized portfolio weights in a 1d array of size <cite>n</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first"><strong>x0</strong> : {ndarray, None}, optional</p>
+<blockquote>
+<div><p>The weights of the assets in the initial portfolio: a 1d array of
+size <cite>n</cite>. Used to calculate transaction cost. The default (None)
+assumes the initial portfolio weights are all zero.</p>
+</div></blockquote>
+<p><strong>tol</strong> : list, optional</p>
+<blockquote>
+<div><p>A list containing two (absolute) tolerances used by the optimizer.
+The first tolerance (default: 1e-4) is used for the sum of the
+short weights (x[x &lt; 0].sum()) and the sum of the long weights
+(x[x &gt; 0].sum()). The second tolerance (default: 1e-10) is related to
+the change in marginal utility of the portfolio. The optimizer
+iterates many times where each iteration makes a small change to the
+portfolio. If the change in utility is below the tolerance then the
+optimization is done.</p>
+</div></blockquote>
+<p><strong>position_limit</strong> : list, optional</p>
+<blockquote>
+<div><p>A list containing two arrays both of size <cite>n</cite> or two doubles. The
+first array contains the lower position limit
+(default: negative infinity) of each asset; the second array contains
+the upper position limit (default: infinity). Instead of arrays the
+limits can be scalars if all assets have the same lower and/or upper
+position limit.</p>
+</div></blockquote>
+<p><strong>transaction_cost</strong> : list, optional</p>
+<blockquote>
+<div><p>A list containing two arrays both of size <cite>n</cite> or two doubles. The
+first array contains linear transaction costs (default: 0) of each
+asset; the second array contains the quadratic transaction costs
+(default: 0). Instead of arrays the costs can be scalars if all
+assets have the same linear and/or quadratic transaction costs.</p>
+</div></blockquote>
+<p><strong>turnover</strong> : list, optional</p>
+<blockquote>
+<div><p>A list containing three scalars. The first elemment (default 0) is
+the minimum allowed turnover. The second element (default infinity)
+is the maximum allowed turnover. The third element (defauly 1000) is
+the maximum number of iterations to use in attempting to satisfy
+the turnover contraints.</p>
+</div></blockquote>
+<p><strong>soft</strong> : {list, None}, optional</p>
+<blockquote>
+<div><p>A list containing three arrays that together describe the soft
+constraint. Let’s call the three arrays <cite>q</cite>, <cite>q0</cite>, and <cite>k</cite>. If
+there are <cite>s</cite> soft constraints then <cite>q</cite> has shape (n, s), <cite>q0</cite> and
+<cite>k</cite> have shape (s,). The soft constraint adds a penalty to the
+utility (objective) function, where the penalty for each soft
+constraint <cite>i</cite> is given by</p>
+<blockquote>
+<div><p>-k[i]*(np.dot(x.T, q[:,i]) - q0[i])**2</p>
+</div></blockquote>
+<p>The total penalty is the sum of the <cite>s</cite> penalties. So a soft
+constraint is a squared penalty on deviations from an equality
+constraint, or a soft equality constraint. The default (None) is
+not to include any soft constraints in the optimization.</p>
+</div></blockquote>
+<p><strong>inequality</strong> : list, optional</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>A list of the following form:</dt>
+<dd><p class="first last">[2-d ndarray, 1-d ndarray, list of tuple of strings, float]</p>
+</dd>
+<dt>We now describe each entry in <cite>inequality</cite>:</dt>
+<dd><p class="first last">The 2-d array, call it <cite>Q</cite>, and 1-d array <cite>c</cite> define inequalities</p>
+</dd>
+</dl>
+<p>we desire to attain, of the form <cite>np.abs(np.dot(Q.T, x)) &lt;= c</cite>
+(element-by element). This is a symmetric inequality centered at zero.</p>
+<blockquote>
+<div><p>The third entry is just used for explaining what is happening</p>
+</div></blockquote>
+<p>in verbose status updates. For each column of Q and entry in c, it
+should contain a tuple of 2 strings describing that particular
+inequality. You can leave one of the strings blank if you want; two are
+provided so that you can make the printout more descriptive if you
+desire.</p>
+<blockquote>
+<div><p>The last entry is an increment: internally, the optimizer tries to</p>
+</div></blockquote>
+<p>satisfy these inequalities via a quadratic penalty on the dot products,
+and this value determines the step size used to increment the penalty
+until the constraint is satisfied.</p>
+<blockquote>
+<div><p>For a quick example, if you have a 1-d array <cite>beta</cite> and you want</p>
+</div></blockquote>
+<p>to, for example, restrict the beta exposure to be no more than 0.05,
+and you want the soft penalty to move in steps of 0.1, then you can
+set</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inequality</span> <span class="o">=</span> <span class="p">[</span><span class="n">beta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="go">                  np.array([0.05])</span>
+<span class="go">                  [(&#39;risk&#39;, &#39;beta&#39;)],</span>
+<span class="go">                  0.1]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.aopt" title="meva.aopt"><code class="xref py py-obj docutils literal"><span class="pre">meva.aopt</span></code></a></dt>
+<dd>analytical portfolio optimization</dd>
+</dl>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="meva.utility">
+<code class="descclassname">meva.</code><code class="descname">utility</code><span class="sig-paren">(</span><em>rho</em>, <em>mu</em>, <em>risk</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.utility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Portfolio utility.</p>
+<p>Utility, U, is defined as:</p>
+<blockquote>
+<div>U = rho * dot(mu, x) - 0.5 * dot(x, dot(v, x))</div></blockquote>
+<p>where the covariance matrix of asset returns, v, is</p>
+<blockquote>
+<div>v = dot(b, b.T) + diag(d)</div></blockquote>
+<p>and b=risk[0], d=risk[1], dot=np.dot, and diag=np.diag.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho</strong> : double</p>
+<blockquote>
+<div><p>Risk tolerance. The higher the value, the less concerned you are
+about risk (or the more concerned you are about return).</p>
+</div></blockquote>
+<p><strong>mu</strong> : ndarray</p>
+<blockquote>
+<div><p>The expected future return of each asset. A 1d array of size <cite>n</cite>
+where <cite>n</cite> is the number of assets.</p>
+</div></blockquote>
+<p><strong>risk</strong> : list</p>
+<blockquote>
+<div><p>The common and individual risk factors (sometimes called systematic
+and idiocyncratic). The first element of the list contains the common
+risk factors: an array of shape (n, k) where n is the number of
+assets and k is the number of risk factors. The second element of the
+list contains the individual variance of each asset: an array of
+shape (n,).</p>
+</div></blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>The weights of the assets in the portfolio: a 1d array of size <cite>n</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>u</strong> : float</p>
+<blockquote class="last">
+<div><p>The utility of portfolio <cite>x</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.marginal_utility" title="meva.marginal_utility"><code class="xref py py-obj docutils literal"><span class="pre">meva.marginal_utility</span></code></a></dt>
+<dd>marginal portfolio utility</dd>
+</dl>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="meva.marginal_utility">
+<code class="descclassname">meva.</code><code class="descname">marginal_utility</code><span class="sig-paren">(</span><em>rho</em>, <em>mu</em>, <em>risk</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.marginal_utility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marginal portfolio utility of a small move in <cite>x</cite>.</p>
+<p>The marginal utility, du, is</p>
+<blockquote>
+<div>du = rho * mu - dot(v, x)</div></blockquote>
+<p>where the covariance matrix of asset returns, v, is</p>
+<blockquote>
+<div>v = dot(b, b.T) + diag(d)</div></blockquote>
+<p>and b=risk[0], d=risk[1], dot=np.dot, and diag=np.diag.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho</strong> : double</p>
+<blockquote>
+<div><p>Risk tolerance. The higher the value, the less concerned you are
+about risk (or the more concerned you are about return).</p>
+</div></blockquote>
+<p><strong>mu</strong> : ndarray</p>
+<blockquote>
+<div><p>The expected future return of each asset. A 1d array of size <cite>n</cite>
+where <cite>n</cite> is the number of assets.</p>
+</div></blockquote>
+<p><strong>risk</strong> : list</p>
+<blockquote>
+<div><p>The common and individual risk factors (sometimes called systematic
+and idiocyncratic). The first element of the list contains the common
+risk factors: an array of shape (n, k) where n is the number of
+assets and k is the number of risk factors. The second element of the
+list contains the individual variance of each asset: an array of
+shape (n,).</p>
+</div></blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>The weights of the assets in the portfolio: a 1d array of size <cite>n</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>u</strong> : float</p>
+<blockquote class="last">
+<div><p>The marginal utility of portfolio <cite>x</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.utility" title="meva.utility"><code class="xref py py-obj docutils literal"><span class="pre">meva.utility</span></code></a></dt>
+<dd>portfolio utility</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="risk">
+<span id="id2"></span><h2>Risk<a class="headerlink" href="#risk" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="meva.cov_pca">
+<code class="descclassname">meva.</code><code class="descname">cov_pca</code><span class="sig-paren">(</span><em>ret</em>, <em>nfactor</em>, <em>shrinkage=0</em>, <em>nvar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.cov_pca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covariance estimation by PCA-based algorithm.</p>
+<p>The common and individual risk factors are sometimes referred to as the
+systematic variance and the idiosyncratic variance, respectively.</p>
+<p>The <cite>nfactor</cite> risk factors are extracted (using principal component
+analysis) from a modified covariance matrix that is a linear combination
+of the sample covariance matrix C and the constant correlation
+covariance matrix CC:</p>
+<blockquote>
+<div>modified cov = shrinkage * CC + (1 - shrinkage) * C.</div></blockquote>
+<p>The constant correlation covariance matrix is calculated as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Calculate the sample correlation matrix from <cite>ret</cite>.</li>
+<li>Find the mean correlation (mean of off-diagonal terms).</li>
+<li>Make a correlation matrix where every off-diagnal term is equal
+to the mean in #2.</li>
+<li>Using each asset’s variance convert the correlation matrix in
+#3 to a covariance matrix.</li>
+</ol>
+</div></blockquote>
+<p>Use NaN to mark missing returns in <cite>ret</cite>.</p>
+<p>Using the output of covbd (b and d), the estimated covariance matrix V
+is:</p>
+<blockquote>
+<div>np.dot(b, b.T) + np.diag(d).</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ret</strong> : ndarray</p>
+<blockquote>
+<div><p>A 2d array of log returns of shape (n, t) where n is the number of
+assets and t is the number of time periods. A NaN is considered a
+missing return.</p>
+</div></blockquote>
+<p><strong>nfactor</strong> : int</p>
+<blockquote>
+<div><p>The number of common risk factors. It cannot be greater than
+n (i.e, ret.shape[0]).</p>
+</div></blockquote>
+<p><strong>shrinkage</strong> : float, optional</p>
+<blockquote>
+<div><p>The risk factors are extracted from a modified covariance matrix:</p>
+<blockquote>
+<div><p>modified cov = shrinkage * CC + (1 - shrinkage) * C</p>
+</div></blockquote>
+<p>where C is the sample covariance matrix and CC is the constant
+correlation covariance matrix. By default <cite>shinkage</cite> is 0.</p>
+</div></blockquote>
+<p><strong>nvar</strong> : {int, None}, optional</p>
+<blockquote>
+<div><p>The variance of each asset (as opposed to the covariance) can be
+calculated using a different number of periods. For example if
+<cite>ret</cite> has shape (100, 250) the covariance structure is calculated
+on the full 250 periods but the variance (the diagonal of the
+covariance matrix) can be calculated on anywhere from 1 to 250
+periods. The default value of None means use all data to calculate
+the variance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>b</strong> : ndarray</p>
+<blockquote>
+<div><p>The common risk factors: an array of shape (n, <cite>nfactor</cite>) where n is
+the number of assets.</p>
+</div></blockquote>
+<p><strong>d</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The individual asset variances: an array of shape (n,) where n is
+the number of assets.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.cov_fa" title="meva.cov_fa"><code class="xref py py-obj docutils literal"><span class="pre">meva.cov_fa</span></code></a></dt>
+<dd>factor analysis covariance</dd>
+</dl>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="meva.cov_fa">
+<code class="descclassname">meva.</code><code class="descname">cov_fa</code><span class="sig-paren">(</span><em>ret</em>, <em>nfactor</em>, <em>niterations</em>, <em>bguess=None</em>, <em>dguess=None</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.cov_fa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covariance estimation by factor analysis based algorithm.</p>
+<p>The common and individual risk factors are sometimes referred to as the
+systematic variance and the idiosyncratic variance, respectively.</p>
+<p>The <cite>nfactor</cite> risk factors are extracted using an EM algorithm to estimate
+latent ‘factor’ variables, and then jointly estimate the distribution of
+these latent factors and the market returns.</p>
+<p>Using the output of cov_pca (b and d), the estimated covariance matrix V
+is:</p>
+<blockquote>
+<div>np.dot(b, b.T) + np.diag(d).</div></blockquote>
+<p>This function cannot handle missing returns. Therefore <cite>ret</cite> should not
+contain NaNs. The cov_pca function can handle missing returns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ret</strong> : ndarray</p>
+<blockquote>
+<div><p>A 2d array of log returns of shape (n, t) where n is the number of
+assets and t is the number of time periods. ‘ret’ cannot contains
+NaNs.</p>
+</div></blockquote>
+<p><strong>nfactor</strong> : int</p>
+<blockquote>
+<div><p>The number of common risk factors. It cannot be greater than
+n (i.e, ret.shape[0]).</p>
+</div></blockquote>
+<p><strong>niterations</strong> : int</p>
+<blockquote>
+<div><p>The number of iterations in the EM algorithm used to fit the model.</p>
+</div></blockquote>
+<p><strong>bguess</strong> : {ndarray,  None}, optional</p>
+<blockquote>
+<div><p>An initial guess at the output b. If you use the output of <cite>cov_pca</cite>,
+it will converge in far fewer iterations. If <cite>None</cite>, then a random
+guess is used.</p>
+</div></blockquote>
+<p><strong>dguess</strong> : {ndarray, None}, optional</p>
+<blockquote>
+<div><p>An initial guess at the output d. If you use the output of <cite>cov_pca</cite>,
+it will converge in far fewer iterations. If <cite>None</cite>, then it is
+initiallized to marginal sample variance for each asset.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>b</strong> : ndarray</p>
+<blockquote>
+<div><p>The common risk factors: an array of shape (n, <cite>nfactor</cite>) where n is
+the number of assets.</p>
+</div></blockquote>
+<p><strong>d</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The individual asset variances: an array of shape (n,) where n is
+the number of assets.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#meva.cov_pca" title="meva.cov_pca"><code class="xref py py-obj docutils literal"><span class="pre">meva.cov_pca</span></code></a></dt>
+<dd>pca-based covariance</dd>
+</dl>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="meva.beta">
+<code class="descclassname">meva.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>risk</em>, <em>index</em>, <em>index_sum=None</em><span class="sig-paren">)</span><a class="headerlink" href="#meva.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Beta of each asset relative to index given covariance matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>risk</strong> : list</p>
+<blockquote>
+<div><p>The common and individual risk factors (sometimes called systematic
+and idiocyncratic). The first element of the list contains the common
+risk factors: an array, B, of shape (n, k) where n is the number of
+assets and k is the number of risk factors. The second element of the
+list contains the individual variance of each asset: an array, D, of
+shape (n,). The n by n covariance matrix, V, of asset returns is
+given by V = np.dot(B, B.T) + np.diag(D). NaNs in <cite>b</cite> and <cite>d</cite> are set
+to zero and then any asset with a NaNs in <cite>b</cite> or <cite>d</cite> is assigned a
+beta of NaN.</p>
+</div></blockquote>
+<p><strong>index</strong> : ndarray</p>
+<blockquote>
+<div><p>A 1d array containing index weights. We want the beta of each asset
+relative to this index. NaNs in <cite>index</cite> are set to 0.</p>
+</div></blockquote>
+<p><strong>index_sum</strong> : {float, None}, optional</p>
+<blockquote>
+<div><p>The index is normalized to sum to <cite>index_sum</cite>. Useful when <cite>index</cite>
+contains NaNs, which are set to zero. By default (None) the sum of
+the index is not normalized.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>beta</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>A 1d array containing the beta of each asset relative to the index.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/icon.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Function reference</a><ul>
+<li><a class="reference internal" href="#optimization">Optimization</a></li>
+<li><a class="reference internal" href="#risk">Risk</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cov.html"
+                        title="previous chapter">Covariance matrix estimation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="license.html"
+                        title="next chapter">License</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cov.html" title="Covariance matrix estimation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2012, Keith Goodman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

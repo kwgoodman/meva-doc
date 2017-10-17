@@ -1,0 +1,67 @@
+============================
+Covariance matrix estimation
+============================
+
+Meva provides two methods to estimate the covariance matrix of log asset
+returns: one, `cov_pca` based on pricipal component analysis (PCA) and one,
+`cov_fa` based on factor analysis. Both functions return :math:`B` and
+:math:`d` such that the covariance matrix :math:`V` is given by
+
+.. math:: V = \mbox{cov}(y) = BB' + \mbox{diag}(d),
+
+where :math:`B` is a :math:`n\times k` matrix mapping :math:`k` factors to
+:math:`n` assets, :math:`d` is...
+
+`cov_pca` (PCA-based)
+=====================
+
+The `cov_pca` function uses principal component analysis to fit a factor-model
+decomposition of market variability. This model decomposes the market return
+:math:`y` into two parts:
+
+.. math:: y = Bx + w.
+
+Here, :math:`B` is a :math:`n\times k` matrix mapping :math:`k` factors to
+:math:`n` assets, :math:`x` is a draw from a :math:`k` dimensional iid standard
+normal distribution, and :math:`w` is a draw from an independent normal
+distribution in which the variance of the :math:`j`-th component is given by
+:math:`d_j`.
+
+The `cov_pca` function handles missing data, coded as `nan`.
+
+`cov_fa` (factor-analysis-based)
+================================
+
+The `cov_fa` function fits the same factor model to the market returns. But
+instead of using principal component analyisis to decompose the variance,
+this factor analysis function uses the EM (expectation-maximization) algorithm
+to iteratively find a maximum-likelihood fit.
+
+For background on the factor analysis model and its EM solution see `Andrew
+Ng's freely available machine-leaning notes
+<http://see.stanford.edu/materials/aimlcs229/cs229-notes9.pdf>`_.
+
+The only difference between our algorithm and his is that we use the matrix
+identities
+
+.. math:: \big(E - FH^{-1}G\big)^{-1} FH^{-1} = 
+          E^{-1}F \big(H - GE^{-1}F\big)^{-1},
+
+and
+
+.. math:: \big(E - FH^{-1}G\big)^{-1} = 
+          E^{-1} + E^{-1}F\big(H - GE^{-1}F\big)^{-1}GE^{-1}
+
+to reduce :math:`n\times n` matrix inversions to :math:`k \times k` matrix
+inversions. These identities result form standard blockwise inversion
+teckniques, for instance on wikipedia
+`here <http://en.wikipedia.org/wiki/Invertible_matrix#Blockwise_inversion>`_.
+
+We apply them with :math:`E=I_{n\times n}`, :math:`F=B'`, :math:`G=-B`, and
+:math:`H=\mbox{diag}(d)` during the E-step in order to avoid :math:`n\times n`
+inversions.
+
+The `cov_fa` function cannot handle missing data.
+
+Examples
+========

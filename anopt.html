@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Optimizers &#8212; meva 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Covariance matrix estimation" href="cov.html" />
+    <link rel="prev" title="Introduction to portfolio optimization" href="opt.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cov.html" title="Covariance matrix estimation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="opt.html" title="Introduction to portfolio optimization"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="optimizers">
+<h1><a class="toc-backref" href="#id1">Optimizers</a><a class="headerlink" href="#optimizers" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#optimizers" id="id1">Optimizers</a><ul>
+<li><a class="reference internal" href="#comparison-of-aopt-and-nopt" id="id2">Comparison of <cite>aopt</cite> and <cite>nopt</cite></a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="comparison-of-aopt-and-nopt">
+<h2><a class="toc-backref" href="#id2">Comparison of <cite>aopt</cite> and <cite>nopt</cite></a><a class="headerlink" href="#comparison-of-aopt-and-nopt" title="Permalink to this headline">¶</a></h2>
+<p>If your portfolio optimization problem can be expressed as a combination of
+linear equality constraints and soft equality constraints, then use
+<code class="docutils literal"><span class="pre">aopt</span></code>. The analytical optimizers is much faster and is guaranteed
+(by math, not by meva) to give the optimal portfolio.</p>
+<p>If, however, you need to specify separately the sum of the short and long
+positions in your portfolio or have some other constraints that <code class="docutils literal"><span class="pre">aopt</span></code>
+does not handle, then use <code class="docutils literal"><span class="pre">nopt</span></code>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">attribute</th>
+<th class="head">aopt</th>
+<th class="head">nopt</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>fast</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>guaranteed optimal</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>linear constraints</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>soft constraints</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+<tr class="row-even"><td>sum longs, shorts</td>
+<td>&#160;</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+<tr class="row-odd"><td>position limits</td>
+<td>&#160;</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+<tr class="row-even"><td>turnover limit</td>
+<td>&#160;</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+<tr class="row-odd"><td>inequality constraint</td>
+<td>&#160;</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+<tr class="row-even"><td>transaction cost</td>
+<td>&#160;</td>
+<td><img class="math" src="_images/math/285ac9c86a824274472e4f5cc300de073f3696fc.png" alt="\checkmark"/></td>
+</tr>
+</tbody>
+</table>
+<p>The meva benchmark suite:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">meva</span><span class="o">.</span><span class="n">bench</span><span class="p">(</span><span class="n">nasset</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">nfactor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrepeat</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">Meva performance benchmark</span>
+<span class="go">    Meva 0.0.2dev</span>
+<span class="go">    Mean wall clock time in seconds</span>
+<span class="go">    nassets=300, nfactor=4, nrepeat=5</span>
+
+<span class="go">  aopt     nopt</span>
+<span class="go">  0.0023   0.7002    sum 1</span>
+<span class="go">           0.8057    longs sum 1, shorts -1</span>
+<span class="go">           0.8027    longs sum 1, shorts -1; linear transaction costs</span>
+<span class="go">           0.0551    longs sum 1, shorts -1; position limit +- 2/nasset</span>
+<span class="go">           0.1255    longs sum 1, shorts -1; position limit +- 4/nasset</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/icon.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Optimizers</a><ul>
+<li><a class="reference internal" href="#comparison-of-aopt-and-nopt">Comparison of <cite>aopt</cite> and <cite>nopt</cite></a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="opt.html"
+                        title="previous chapter">Introduction to portfolio optimization</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cov.html"
+                        title="next chapter">Covariance matrix estimation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/anopt.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cov.html" title="Covariance matrix estimation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="opt.html" title="Introduction to portfolio optimization"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2012, Keith Goodman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+==================
+Function reference
+==================
+
+Meva provides the following top-level functions:
+
+======================= =================================================
+:ref:`Optimization`     :meth:`aopt <meva.aopt>`,
+                        :meth:`nopt <meva.nopt>`,
+                        :meth:`utility <meva.utility>`,
+                        :meth:`marinal_utility <meva.marginal_utility>`
+:ref:`Risk`             :meth:`cov_pca <meva.cov_pca>`,
+                        :meth:`cov_fa <meva.cov_fa>`,
+                        :meth:`beta <meva.beta>`
+======================= =================================================
+
+
+.. _Optimization:
+
+Optimization
+------------
+
+.. autofunction:: meva.aopt
+
+------------
+             
+.. autofunction:: meva.nopt
+
+------------
+
+.. autofunction:: meva.utility
+
+------------
+
+.. autofunction:: meva.marginal_utility
+
+
+.. _Risk:
+
+Risk
+----
+
+.. autofunction:: meva.cov_pca
+
+------------
+
+.. autofunction:: meva.cov_fa
+
+------------
+
+.. autofunction:: meva.beta

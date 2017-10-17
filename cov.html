@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Covariance matrix estimation &#8212; meva 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Function reference" href="reference.html" />
+    <link rel="prev" title="Optimizers" href="anopt.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="Function reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="anopt.html" title="Optimizers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="covariance-matrix-estimation">
+<h1>Covariance matrix estimation<a class="headerlink" href="#covariance-matrix-estimation" title="Permalink to this headline">¶</a></h1>
+<p>Meva provides two methods to estimate the covariance matrix of log asset
+returns: one, <cite>cov_pca</cite> based on pricipal component analysis (PCA) and one,
+<cite>cov_fa</cite> based on factor analysis. Both functions return <img class="math" src="_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> and
+<img class="math" src="_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/> such that the covariance matrix <img class="math" src="_images/math/fae0e7a73748991e5540d874416000583f64f58e.png" alt="V"/> is given by</p>
+<div class="math">
+<p><img src="_images/math/d5e80cc39fa4b9481a165d79e0b66b4f420692f0.png" alt="V = \mbox{cov}(y) = BB' + \mbox{diag}(d),"/></p>
+</div><p>where <img class="math" src="_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> is a <img class="math" src="_images/math/b56e90d00541471d180dbf5991b7bb930f0a1c58.png" alt="n\times k"/> matrix mapping <img class="math" src="_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> factors to
+<img class="math" src="_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> assets, <img class="math" src="_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/> is…</p>
+<div class="section" id="cov-pca-pca-based">
+<h2><cite>cov_pca</cite> (PCA-based)<a class="headerlink" href="#cov-pca-pca-based" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>cov_pca</cite> function uses principal component analysis to fit a factor-model
+decomposition of market variability. This model decomposes the market return
+<img class="math" src="_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> into two parts:</p>
+<div class="math">
+<p><img src="_images/math/5e2c6e35528eb3a7b716bce563f57ae44920db5a.png" alt="y = Bx + w."/></p>
+</div><p>Here, <img class="math" src="_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> is a <img class="math" src="_images/math/b56e90d00541471d180dbf5991b7bb930f0a1c58.png" alt="n\times k"/> matrix mapping <img class="math" src="_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> factors to
+<img class="math" src="_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> assets, <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> is a draw from a <img class="math" src="_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> dimensional iid standard
+normal distribution, and <img class="math" src="_images/math/ecd1ee2a1cd226b40c37e079aca62398d4b774f5.png" alt="w"/> is a draw from an independent normal
+distribution in which the variance of the <img class="math" src="_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/>-th component is given by
+<img class="math" src="_images/math/5e6cfb16a1d0565098e1a35072ef6fbfef092db3.png" alt="d_j"/>.</p>
+<p>The <cite>cov_pca</cite> function handles missing data, coded as <cite>nan</cite>.</p>
+</div>
+<div class="section" id="cov-fa-factor-analysis-based">
+<h2><cite>cov_fa</cite> (factor-analysis-based)<a class="headerlink" href="#cov-fa-factor-analysis-based" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>cov_fa</cite> function fits the same factor model to the market returns. But
+instead of using principal component analyisis to decompose the variance,
+this factor analysis function uses the EM (expectation-maximization) algorithm
+to iteratively find a maximum-likelihood fit.</p>
+<p>For background on the factor analysis model and its EM solution see <a class="reference external" href="http://see.stanford.edu/materials/aimlcs229/cs229-notes9.pdf">Andrew
+Ng’s freely available machine-leaning notes</a>.</p>
+<p>The only difference between our algorithm and his is that we use the matrix
+identities</p>
+<div class="math">
+<p><img src="_images/math/257f1a795c37d685c09a5ee93378400b3a990656.png" alt="\big(E - FH^{-1}G\big)^{-1} FH^{-1} =
+E^{-1}F \big(H - GE^{-1}F\big)^{-1},"/></p>
+</div><p>and</p>
+<div class="math">
+<p><img src="_images/math/ce307c6a1febc850e129f9486c5c17ca73aeb56d.png" alt="\big(E - FH^{-1}G\big)^{-1} =
+E^{-1} + E^{-1}F\big(H - GE^{-1}F\big)^{-1}GE^{-1}"/></p>
+</div><p>to reduce <img class="math" src="_images/math/b6e6f4aeb4113faf6a61e07c51f02a70ba64fd46.png" alt="n\times n"/> matrix inversions to <img class="math" src="_images/math/bf3013518b85d73aaabffa1849fb6ffce42d70ed.png" alt="k \times k"/> matrix
+inversions. These identities result form standard blockwise inversion
+teckniques, for instance on wikipedia
+<a class="reference external" href="http://en.wikipedia.org/wiki/Invertible_matrix#Blockwise_inversion">here</a>.</p>
+<p>We apply them with <img class="math" src="_images/math/beff03c8201b2c71104b228d2a39d3bd91aad9cc.png" alt="E=I_{n\times n}"/>, <img class="math" src="_images/math/d41ef938b49265414d7ba872106846833170a82f.png" alt="F=B'"/>, <img class="math" src="_images/math/a50ab13e9057de8de7ddd1af24f754fb11732568.png" alt="G=-B"/>, and
+<img class="math" src="_images/math/8955a15bd994f5733cfaf01db3ae5a9546d36d10.png" alt="H=\mbox{diag}(d)"/> during the E-step in order to avoid <img class="math" src="_images/math/b6e6f4aeb4113faf6a61e07c51f02a70ba64fd46.png" alt="n\times n"/>
+inversions.</p>
+<p>The <cite>cov_fa</cite> function cannot handle missing data.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/icon.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Covariance matrix estimation</a><ul>
+<li><a class="reference internal" href="#cov-pca-pca-based"><cite>cov_pca</cite> (PCA-based)</a></li>
+<li><a class="reference internal" href="#cov-fa-factor-analysis-based"><cite>cov_fa</cite> (factor-analysis-based)</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="anopt.html"
+                        title="previous chapter">Optimizers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="next chapter">Function reference</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cov.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="Function reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="anopt.html" title="Optimizers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">meva 0.0.4 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2012, Keith Goodman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

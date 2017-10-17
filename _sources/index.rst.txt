@@ -1,0 +1,23 @@
+====
+MEVA
+====
+
+Long-short, mean-variance portfolio optimization.
+
+.. toctree::
+   :maxdepth: 3
+
+   intro
+   opt
+   anopt
+   cov
+   reference
+   license
+
+   
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

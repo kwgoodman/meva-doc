@@ -1,0 +1,49 @@
+==========
+Optimizers
+==========
+
+.. contents::
+
+Comparison of `aopt` and `nopt`
+===============================
+
+If your portfolio optimization problem can be expressed as a combination of
+linear equality constraints and soft equality constraints, then use
+``aopt``. The analytical optimizers is much faster and is guaranteed
+(by math, not by meva) to give the optimal portfolio.
+
+If, however, you need to specify separately the sum of the short and long
+positions in your portfolio or have some other constraints that ``aopt``
+does not handle, then use ``nopt``.
+
+======================   ==================  ==================
+attribute                aopt                nopt
+======================   ==================  ==================
+fast                     :math:`\checkmark`     
+guaranteed optimal       :math:`\checkmark`     
+linear constraints       :math:`\checkmark`     
+soft constraints         :math:`\checkmark`  :math:`\checkmark`
+sum longs, shorts                            :math:`\checkmark`
+position limits                              :math:`\checkmark`
+turnover limit                               :math:`\checkmark`
+inequality constraint                        :math:`\checkmark`
+transaction cost                             :math:`\checkmark`
+======================   ==================  ==================
+
+The meva benchmark suite::
+
+    >>> meva.bench(nasset=300, nfactor=4, nrepeat=5)
+    Meva performance benchmark
+        Meva 0.0.2dev
+        Mean wall clock time in seconds
+        nassets=300, nfactor=4, nrepeat=5
+
+      aopt     nopt
+      0.0023   0.7002    sum 1
+               0.8057    longs sum 1, shorts -1
+               0.8027    longs sum 1, shorts -1; linear transaction costs
+               0.0551    longs sum 1, shorts -1; position limit +- 2/nasset
+               0.1255    longs sum 1, shorts -1; position limit +- 4/nasset 
+
+Examples
+========
