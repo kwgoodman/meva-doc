@@ -30,6 +30,11 @@ asset returns. Meva contains two algorithms to estimate the covariance
 matrix: ``cov_pca()`` which is base on principal component analysis and
 ``cov_fa()`` which is based on factor analysis.
 
+Documentation
+=============
+
+- https://kwgoodman.github.io/meva-doc
+
 Install
 =======
 
